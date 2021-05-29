@@ -9,7 +9,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgb(142, 120, 236);
+  background: rgb(136, 116, 221);
 }
 .header {
   display: flex;
@@ -39,6 +39,7 @@
   transform: scale(0.925);
   transition: transform 0.2s;
 }
+
 .front,
 .back {
   width: 100%;
@@ -46,7 +47,7 @@
   padding: 20px;
   position: absolute;
   border-radius: 5px;
-  background: rgb(120, 250, 170);
+  background: black;
   backface-visibility: hidden;
 }
 .front {

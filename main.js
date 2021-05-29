@@ -1,40 +1,96 @@
-const cards = document.querySelectorAll(".card");
+const clicks=document.querySelector(".move")
+const timer=document.querySelector(".time")
+const cards=document.querySelectorAll(".card")
 let firstCard;
 let secondCard;
-let hasFlippedCard=false;
-let lockBoard=false;
+let hasFlipped=false;
+let lockboard=false;
+let move=0;
+let pair=0;
+let minute=0;
+let seconds=0;
+let interval;
+// -------------------------------------------------------------------
+
+
 function flipCard(){
-    // for locking the board when we have two cards
-    if(lockBoard)return;
-    // to prevent the multiple function call on same card when we click
-    // Actually we prevent the function call on last clicked card
-    if(this===firstCard)return;
-    // for fliping the card
-    this.classList.add("flip")
-    // to check whether the card is flipped or not
-if(!hasFlippedCard){
-firstCard=this;
-hasFlippedCard=true;
-    return;
-}
-secondCard=this;
-lockBoard=true;
-checkForMatch();
-}
-function checkForMatch(){
-    let match=firstCard.dataset.tech===secondCard.dataset.tech
-    match ? disableCards() : unFlippCard(); 
-}
-function disableCards(){
+    move++;
+    clicks.innerHTML=move;
+    if(move==1){
+        startCounter();
+    }
+    if(lockboard)return
+    if(firstCard===this)return;
+this.classList.add("flip")
 
+if(!hasFlipped){
+firstCard=this
+hasFlipped=true;
+return
 }
-function unFlippCard(){
+secondCard=this
+lockboard=true
+isMatch()
+}
+function isMatch(){
+    let mach=firstCard.dataset.tech===secondCard.dataset.tech;
+    if(mach){
+        disableCards()
+    }else{
+    unflipCard();
+    }
+}
+ function disableCards(){
+     pair++
+     firstCard.removeEventListener("click",flipCard)
+     secondCard.removeEventListener("click",flipCard)
+     if(pair===6){
+        endGame()
+    }
+     reseatBoard();
+    
+ }
+function unflipCard(){
+setTimeout(() =>{
 
+    firstCard.classList.remove("flip")
+    secondCard.classList.remove("flip")
+    reseatBoard()
+},500)
+}
+function  reseatBoard(){
+firstCard=null
+secondCard=null
+hasFlipped=false
+lockboard=false
 }
 
+(function shuffleCards(){
+    cards.forEach((card)=>{
+        let postion=Math.floor(Math.random()*12)
+        card.style.order=postion;
+    })
+}())
+function endGame(){
+    stopTimer();
+    alert(`You win with ${move} moves & in ${minute} minutes and ${seconds} secs`)
+}
 
+function startCounter(){
+    interval=setInterval(() => {
+       timer.innerHTML=minute + "min" + seconds +"sec";
+       seconds++;
+       if(seconds===60){
+           minute++;
+           seconds=0;
+       }
+   }, 1000); 
+}
+function stopTimer(){
+    clearInterval(interval)
+}
 
 
 cards.forEach(card =>{
-    card.addEventListener("click",flipCard)
-})
+    card.addEventListener("click",flipCard);
+} )
